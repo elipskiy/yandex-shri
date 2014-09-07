@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>D3.js</title>
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script>
+      window.onload = function() {
+        var w = 960, h = 500;
+
+        var svg = d3.select("#svg_canvas").append("svg:svg")
+          .attr('width', w)
+          .attr('height', h);
+
+        var circle = svg.selectAll("circle")
+          .data(d3.range(99).map(function() {
+            return {
+              x: w * Math.random(),
+              y: h * Math.random(),
+              dx: Math.random() - .3,
+              dy: Math.random() - .3,
+              cg: Math.floor(Math.random() * 255),
+              cd: -1,
+            }
+          }))
+          .enter().append("svg:circle")
+            .attr('r', function() {return Math.random() * 7 + 13;})
+
+        var text = svg.append("svg:text")
+          .attr('x', 20)
+          .attr('y', 20);
+
+        var start = Date.now(),
+          frames = 0;
+
+        d3.timer(function() {
+          var now = Date.now(), duration = now - start;
+          text.text(~~(++frames * 1000 / duration));
+          if (duration >= 1000) frames = 0, start = now;
+
+          circle 
+            .attr('cx', function(d) {d.x += d.dx; if (d.x > w) d.x -= w; else if (d.x < 0) d.x += w; return d.x})
+            .attr('cy', function(d) {d.y += d.dy; if (d.y > h) d.y -= h; else if (d.y < 0) d.y += h; return d.y})
+            .attr('fill', function(d) {if (d.cg < 5 || d.cg > 250) d.cd *= -1; d.cg += d.cd * Math.random() * 4; return d3.rgb(255, d.cg, 0g  );});
+        });
+      }
+
+
+    </script>
+  </head>
+  <body>
+    <h1>D3.js</h1>
+    <div id="svg_canvas"></div>
+  </body>
+</html>
