@@ -63,7 +63,7 @@
       function run_equalizer (selector, timeout) {
           $(selector + ' span').each(function (i) {
               var colHeight = Math.round($(selector).height() * Math.random());
-              $(this).height(colHeight);
+              $(this).g(colHeight);
           });
       
           $(selector + ' span').animate(
@@ -81,23 +81,6 @@
           // setEqualizer('#eq_2 .equalizer', 1000, 2);
           // setEqualizer('#eq_3 .equalizer', 1000, 2);
       }
-
-      // var dict = "qazxswedc`~1234rfv!@#$QAZXSWEDC";
-        // function rec(str, n) {
-        //     if (str.length > 10) return;
-        //     console.log(str);
-        //     document.getElementsByClassName("cbi-input-password")[0].value = str;
-        //     document.getElementsByClassName("cbi-button-apply")[0].click();
-        //     for (var j=0; j < dict.length; j++) {
-        //         if (str.indexOf(dict[j]) === -1) {
-        //             rec(str+dict[j], n++);
-        //         }
-        //     }
-        // }
-        // for (var k = 0; k < dict.length; k++) {
-        //     rec(dict[k], 0);
-        // }
-
     </script>
   </head>
   <body>
