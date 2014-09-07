@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Equalizr</title>
+    <style>
+      .equalizer-wrapper {
+          float:left; margin: 0 20px 20px 0;
+      }
+      .equalizer {
+          overflow: hidden;
+          border:1px solid #ddd;
+      }
+      .equalizer span {
+          vertical-align: bottom;
+          display: inline-block;
+          font-size: 0;
+          line-height: 0px;
+          background: rgb(255, 192, 203);
+          border-top: 2px solid red;
+          overflow: hidden;
+          -webkit-transition: all .5s ease 0s;
+          -moz-transition: all .5s ease 0s;
+          -o-transition: all .5s ease 0s;
+          transition: all .5s ease 0s;
+      }
+      .equalizer.small {
+          width: 100px;
+          height: 100px;
+      }
+      .equalizer.normal {
+          width: 200px;
+          height: 200px;
+      }
+      .equalizer.big {
+          width: 300px;
+          height: 300px;
+      }
+    </style>
+    <script>
+        function setEqualizer(selector, timeout, colWidth) {
+            if (!colWidth) {
+                colWidth = 1;
+            }
+            var selectorCache = document.getElementById(selector).getElementsByClassName("equalizer")[0];
+            selectorCache.style.verticalAlign = "bottom";
+            selectorCache.style.lineHeight = selectorCache.clientHeight + "px";
+
+            var colQuantity = Math.ceil(selectorCache.clientWidth/colWidth);
+            var cols = new Array(colQuantity);
+            var fragment = document.createDocumentFragment();
+            for (var i = 0; i < cols.length; i++) {
+                var span = document.createElement("span");
+                span.style.width = colWidth + "px";
+                // span.style.verticalAlign = "bottom";
+                // span.style.display = "inline-block";
+                // span.style.fontSize = 0;
+                // span.style.lineHeight = 0 + "px";
+                // span.style.background = "pink";
+                // span.style.borderTop = "2px solid red";
+                // span.style.height = 50 + "px";
+                // span.style.overflow = "hidden";
+                fragment.appendChild(span);
+            }
+            selectorCache.appendChild(fragment);
+
+            run_equalizer(selector, timeout, true);
+        }
+
+        function run_equalizer(selector, timeout, toMid) {
+            var selectorCache = document.getElementById(selector).getElementsByClassName("equalizer")[0];
+            var selectorCacheWithSpanList = selectorCache.getElementsByTagName("span");
+
+            for (var i = 0; i < selectorCacheWithSpanList.length; i++) {
+                var colHeight = parseInt(selectorCache.style.lineHeight, 10);
+                if (!toMid) {
+                    colHeight = Math.round(colHeight * Math.random());   
+                } else {
+                    colHeight /= 2;
+                }
+                selectorCacheWithSpanList[i].style.height = colHeight + "px";
+            }
+
+            setTimeout(function() { run_equalizer(selector, timeout, !toMid); }, 500);
+        }
+
+        window.onload = function() {
+            setEqualizer("eq_1", 1000, 2);
+            setEqualizer("eq_2", 1000, 2);
+            setEqualizer("eq_3", 1000, 2);
+        }    
+    </script>
+  </head>
+  <body>
+    <h1>Equalizers</h1>
+    <div id="eq_1" class="equalizer-wrapper">
+      <h2>First</h2>
+      <div class="equalizer small"></div>
+    </div>
+    <div id="eq_2" class="equalizer-wrapper">
+      <h2>Second</h2>
+      <div class="equalizer normal"></div>
+    </div>
+    <div id="eq_3" class="equalizer-wrapper">
+      <h2>Third</h2>
+      <div class="equalizer big"></div>
+    </div>
+  </body>
+</html>
