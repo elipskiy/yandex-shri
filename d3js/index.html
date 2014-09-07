@@ -11,19 +11,21 @@
           .attr('width', w)
           .attr('height', h);
 
-        var circle = svg.selectAll("circle")
-          .data(d3.range(99).map(function() {
-            return {
-              x: w * Math.random(),
-              y: h * Math.random(),
-              dx: Math.random() - .3,
-              dy: Math.random() - .3,
-              cg: Math.floor(Math.random() * 255),
-              cd: -1,
-            }
-          }))
+        var nodes = d3.range(333).map(function() {
+          return {
+            x: w * Math.random(),
+            y: h * Math.random(),
+            dx: Math.random() - .3,
+            dy: Math.random() - .3,
+            cg: Math.floor(Math.random() * 255),
+            cd: -1,
+          }
+        });
+
+        var circles = svg.selectAll("circle")
+          .data(nodes)
           .enter().append("svg:circle")
-            .attr('r', function() {return Math.random() * 7 + 13;})
+            .attr('r', function() {return Math.random() * 5 + 7;})
 
         var text = svg.append("svg:text")
           .attr('x', 20)
@@ -32,19 +34,35 @@
         var start = Date.now(),
           frames = 0;
 
+        svg.on("mousemove", function() {
+          var i = -1,
+              n = nodes.length,
+              pos = d3.mouse(this),
+              diffX = 0, diffY = 0;
+
+          while (++i < n) {
+            diffX = nodes[i].x - pos[0];
+            diffY = nodes[i].y - pos[1];
+            if (Math.sqrt(Math.pow(diffX, 2) + Math.pow(diffY, 2)) < 80) {
+              nodes[i].dx = Math.random() * (diffX) / 10;
+              nodes[i].dy = Math.random() * (diffY) / 10;
+              nodes[i].x += (diffX) / 20;
+              nodes[i].y += (diffY) / 20;
+            }
+          }
+        }); 
+
         d3.timer(function() {
           var now = Date.now(), duration = now - start;
           text.text(~~(++frames * 1000 / duration));
           if (duration >= 1000) frames = 0, start = now;
 
-          circle 
-            .attr('cx', function(d) {d.x += d.dx; if (d.x > w) d.x -= w; else if (d.x < 0) d.x += w; return d.x})
-            .attr('cy', function(d) {d.y += d.dy; if (d.y > h) d.y -= h; else if (d.y < 0) d.y += h; return d.y})
-            .attr('fill', function(d) {if (d.cg < 5 || d.cg > 250) d.cd *= -1; d.cg += d.cd * Math.random() * 4; return d3.rgb(255, d.cg, 0g  );});
+          circles 
+            .attr('cx', function(d) {d.x += d.dx; if (d.dx > 1) d.dx -= .1; else if (d.dx < -1) d.dx += .1; if (d.x > w) d.x -= w; else if (d.x < 0) d.x += w; return d.x})
+            .attr('cy', function(d) {d.y += d.dy; if (d.dy > 1) d.dy -= .1; else if (d.dy < -1) d.dy += .1; if (d.y > h) d.y -= h; else if (d.y < 0) d.y += h; return d.y})
+            .attr('fill', function(d) {if (d.cg < 5 || d.cg > 250) d.cd *= -1; d.cg += d.cd * Math.random() * 4; return d3.rgb(255, d.cg, 0);});
         });
       }
-
-
     </script>
   </head>
   <body>
