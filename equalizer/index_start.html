@@ -63,7 +63,7 @@
       function run_equalizer (selector, timeout) {
           $(selector + ' span').each(function (i) {
               var colHeight = Math.round($(selector).height() * Math.random());
-              $(this).g(colHeight);
+              $(this).height(colHeight);
           });
       
           $(selector + ' span').animate(
