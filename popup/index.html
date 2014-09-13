@@ -63,12 +63,13 @@
         visibility: hidden;
       }
       .popup_3 {
-        width: 400px;
-        height: 200px;
         position: absolute;
-        top: 50%; left: 50%;
-        margin-left: -220px;
-        margin-top: -120px;
+        width: 50%;
+        margin: auto;
+        top: 50%; left: 50%; 
+        -webkit-transform: translate(-50%,-50%);
+        -ms-transform: translate(-50%,-50%);
+        transform: translate(-50%,-50%);
       }
 
       .pre_popup_4 {
@@ -153,21 +154,21 @@
     <div class="pre_popup_2">
       <div id="popup_2" class="popup popup_2">
         <h1>Второй способ попапа</h1>
-        <p>Центрирование окна на css с помощью vertical-align и inline-block. В ie7 и младше не будет вертикально центрирования. </p>
+        <p>Центрирование окна на css с помощью vertical-align и inline-block. В ie7 и младше не будет вертикально центрирования.</p>
       </div>
     </div>
 
     <div class="pre_popup_3">
       <div id="popup_3" class="popup popup_3">
         <h1>Третий способ попапа</h1>
-        <p>Центрирование окна на css с помощью margin. Статический размер блока, а значит текст может вылезти за блок. Плюс - кроссбраузерность. </p>
+        <p>Центрирование окна на css с помощью transform. Простой способ, но не работает в ie8 и младше. Мешает другим transform. Необходимы префиксы.</p>
       </div>
     </div>
 
     <div class="pre_popup_4">
       <div id="popup_4" class="popup popup_4">
         <h1>Четвёртый способ попапа</h1>
-        <p>Центрирование окна на css с помощью flexbox. Много вариантов позиционирования. Не поддерживает ie9 и младше. Много префиксов.</p>
+        <p>Центрирование окна на css с помощью flexbox. Много вариантов позиционирования. Не поддерживает ie9 и младше. В ie10 старая спецификация flexible boxes. Много префиксов.</p>
       </div>
     </div>
 
