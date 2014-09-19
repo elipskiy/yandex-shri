@@ -13,162 +13,251 @@
       html, body {
         max-width: 100%;
         max-height: 100%;
+        font: 13px Arial, Helvetica, sans-serif;
       }
-      a {
-        color: #1a3dc1;
-        font-size: 1.2em;
+
+      h1 {
+        font-size: 3em;
+      }
+      .center {
+        text-align: center;
+      }
+
+      .navigation {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        margin-left: -166px;
+        margin-top: -16px;
+
+        overflow: hidden;
+      }
+      .button {
+        display: inline-block;
+        float: left;    
+        padding: 0;
+        margin: 0;
+
+        font: 15px Arial, Helvetica, sans-serif;
+        line-height: 30px;
+        height: 32px;
+
+        border: 1px solid #ccc9c9;
+        border-right-width: 0px;
+        text-decoration: none;
+        background: #fff;
+        cursor: pointer;
+        color: #000;
+
+        -webkit-transition: background-color .25s ease;
+           -moz-transition: background-color .25s ease;
+            -ms-transition: background-color .25s ease;
+             -o-transition: background-color .25s ease;
+                transition: background-color .25s ease;
+      }
+      .button.left {
+        border-radius: 3px 0 0 3px;
+      }
+      .button.right {
+        border-radius: 0 3px 3px 0;   
+        border-right-width: 1px;
+      }
+      .button span {
+        padding: 0 13px;
+      }
+      .button:hover {
+        background-color: #e4e4e4;
+      }
+
+
+      .pre_popup {
+        visibility: hidden;
       }
       .popup {
-        z-index: 100;
-        max-width: 80%;
-        padding: 20px;
         border: 2px solid #eee;
         border-radius: 15px;
         background: white;
+        max-width: 80%;
+        padding: 20px;
+        z-index: 100;
       }
 
       .pre_popup_1 {
         display: block;
-        visibility: hidden;
       }
       .popup_1 {
-        display: block;
         position: absolute;
+        display: block;
       }
 
       .pre_popup_2 {
-        display: block;
-        visibility: hidden;
         position: fixed;
-        top: 0px;
+        display: block;
         left: 0px;
-        width: 100%;
+        top: 0px;
         height: 100%;
+        width: 100%;
         text-align: center;
       }
       .pre_popup_2:after {
         display: inline-block;
-        height: 100%;
         vertical-align: middle;
+        height: 100%;
         content: ''
       }
       .popup_2 {
+        vertical-align: middle;
         display: inline-block;
         position: relative;
-        vertical-align: middle;
       }
 
       .pre_popup_3 {
         display: block;
-        visibility: hidden;
       }
       .popup_3 {
         position: absolute;
-        width: 50%;
         margin: auto;
-        top: 50%; left: 50%; 
+        width: 50%;
+        left: 50%; 
+        top: 50%; 
         -webkit-transform: translate(-50%,-50%);
-        -ms-transform: translate(-50%,-50%);
-        transform: translate(-50%,-50%);
+            -ms-transform: translate(-50%,-50%);
+                transform: translate(-50%,-50%);
       }
 
       .pre_popup_4 {
-        visibility: hidden;
         position: absolute;
         top: 0;
+
         display: -webkit-box;
         display: -moz-box;
         display: -ms-flexbox;
         display: -moz-flex;
         display: -webkit-flex;
         display: flex;
+        
         flex-direction: column;
+        align-items: center;
         -webkit-box-align: center;
         -moz-box-align: center;
         -ms-flex-align: center;
         -webkit-align-items: center;
-        align-items: center;
         -webkit-box-pack: center;
         -moz-box-pack: center;
         -ms-flex-pack: center;
         -webkit-justify-content: center;
         justify-content: center;
+        
         height: 100%;
         width: 100%;
       }
       .popup_4 {
+        position: relative;
+      }
+
+
+      .close {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        height: 20px;
+        width: 20px;
+        line-height: 20px;
+      }
+      .addText {
+        width: 120px;
+        padding: 2px 5px; 
+        margin: auto;
+      }
+      .addText, .close {
+        text-align: center;
+
+        border: 1px solid #ccc9c9;
+        border-radius: 55px;
+        
+        cursor: pointer;  
+      }
+      .addText:hover, .close:hover {
+        background-color: #e4e4e4;
       }
     </style>
     <script>
-      function openFirstPopup(selector) {
+      function resizeJsPopup(selector) {
         $(selector + " .popup").css('left',($(window).width()-$(selector + " .popup").outerWidth())/ 2 + 'px');
         $(selector + " .popup").css('top',($(window).height()-$(selector + " .popup").outerHeight())/ 2 + 'px');
-        $(selector).css("visibility", "visible");
+      }
+      
+      function openPopup(selector) {
+          $(selector).css("visibility", "visible");
       }
 
-      function openSecondPopup(selector) {
-        $(selector).css("visibility", "visible");
-      }
+      $(document).ready(function() {
 
-      function openThirdPopup(selector) {
-        $(selector).css("visibility", "visible");
-      }
-
-      function openFourthPopup(selector) {
-        $(selector).css("visibility", "visible");
-      }
-
-      $(function(){
-        $(document).click(function(event) {
-          if ($(event.target).closest("a").length) return;
-          $(".pre_popup_1").css("visibility", "hidden");
-          $(".pre_popup_2").css("visibility", "hidden");
-          $(".pre_popup_3").css("visibility", "hidden");
-          $(".pre_popup_4").css("visibility", "hidden");
-          event.stopPropagation();
+        $(".close").on("click", function() {
+          $(".pre_popup").css("visibility", "hidden");
+        });
+        
+        $(".addText").on("click", function() {
+          $(this).parent().append("<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Maiores possimus doloribus laborum neque vitae perspiciatis sequi quas quis quod rem atque, in iusto amet omnis, dicta, accusamus perferendis sint minima?</p>");
+        
+          if ($(".pre_popup_1").css("visibility") === "visible") {
+            resizeJsPopup(".pre_popup_1");
+          }
         });
       });
 
       $(window).resize(function(event) {
         if ($(".pre_popup_1").css("visibility") === "visible") {
-          openFirstPopup(".pre_popup_1");
+          resizeJsPopup(".pre_popup_1");
         }
       });
 
     </script>
   </head>
   <body>
-    <h1>Popup</h1>
-    <a href="javascript:void(0);" onclick="openFirstPopup('.pre_popup_1');">Popup 1</a>
-    <a href="javascript:void(0);" onclick="openSecondPopup('.pre_popup_2');">Popup 2</a>
-    <a href="javascript:void(0);" onclick="openThirdPopup('.pre_popup_3');">Popup 3</a>
-    <a href="javascript:void(0);" onclick="openFourthPopup('.pre_popup_4');">Popup 4</a>
+    <h1 class="center ">Popup</h1>
 
-    <div class="pre_popup_1">
-      <div id="popup_1" class="popup popup_1">
-        <h1>Первый способ попапа</h1>
-        <p>Центрирование окна на js. Работает хорошо пока включен js у пользователя.</p>
+    <div class="navigation">
+        <button type="button" onclick="openPopup('.pre_popup_1'); resizeJsPopup('.pre_popup_1');" class="button left"><span>Popup 1</span></button>
+        <button type="button" onclick="openPopup('.pre_popup_2');" class="button "><span>Popup 2</span></button>
+        <button type="button" onclick="openPopup('.pre_popup_3');" class="button "><span>Popup 3</span></button>
+        <button type="button" onclick="openPopup('.pre_popup_4');" class="button right"><span>Popup 4</span></button>
+    </div>
+
+
+    <div class="pre_popup_1 pre_popup">
+      <div class="popup popup_1">
+        <div class="close">x</div>    
+        <h2>Первый способ попапа</h2>
+        <p>Центрирование окна на js. Работает пока включен js у пользователя. Необходим постоянный перерасчёт положения блока, его ширины высоты.</p>
+        <div class="addText">Добавить текст</div>
       </div>
     </div>
 
-    <div class="pre_popup_2">
-      <div id="popup_2" class="popup popup_2">
-        <h1>Второй способ попапа</h1>
-        <p>Центрирование окна на css с помощью vertical-align и inline-block. В ie7 и младше не будет вертикально центрирования.</p>
+    <div class="pre_popup_2 pre_popup">
+      <div class="popup popup_2">
+        <div class="close">x</div>
+        <h2>Второй способ попапа</h2>
+        <p>Центрирование окна на css с помощью vertical-align и inline-block. В ie7 и младше не будет вертикального центрирования.</p>
+        <div class="addText">Добавить текст</div>
       </div>
     </div>
 
-    <div class="pre_popup_3">
-      <div id="popup_3" class="popup popup_3">
-        <h1>Третий способ попапа</h1>
+    <div class="pre_popup_3 pre_popup">
+      <div class="popup popup_3">
+        <div class="close">x</div>
+        <h2>Третий способ попапа</h2>
         <p>Центрирование окна на css с помощью transform. Простой способ, но не работает в ie8 и младше. Мешает другим transform. Необходимы префиксы.</p>
+        <div class="addText">Добавить текст</div>
       </div>
     </div>
 
-    <div class="pre_popup_4">
-      <div id="popup_4" class="popup popup_4">
-        <h1>Четвёртый способ попапа</h1>
-        <p>Центрирование окна на css с помощью flexbox. Много вариантов позиционирования. Не поддерживает ie9 и младше. В ie10 старая спецификация flexible boxes. Много префиксов.</p>
+    <div class="pre_popup_4 pre_popup">
+      <div class="popup popup_4">
+        <div class="close">x</div>
+        <h2>Четвёртый способ попапа</h2>
+        <p>Центрирование окна на css с помощью flexbox. Много вариантов позиционирования. Но не поддерживает ie9 и младше. В ie10 старая спецификация flexible boxes. Много префиксов.</p>
+        <div class="addText">Добавить текст</div>
       </div>
     </div>
 
