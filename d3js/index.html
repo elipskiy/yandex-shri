@@ -35,8 +35,8 @@
           return {
             x: w * Math.random(),
             y: h * Math.random(),
-            dx: Math.random() - .3,
-            dy: Math.random() - .3,
+            dx: Math.random() - .5,
+            dy: Math.random() - .5,
             cg: Math.floor(Math.random() * 255),
             cd: -1,
           }
@@ -71,9 +71,9 @@
             .attr("cx", function(c) {
               c.x += c.dx; 
 
-              if (c.dx > 1)  {
+              if (c.dx > .5)  {
                 c.dx -= .1;
-              } else if (c.dx < -1) {
+              } else if (c.dx < -.5) {
                 c.dx += .1;
               }
 
@@ -87,9 +87,9 @@
             }).attr("cy", function(c) {
               c.y += c.dy; 
 
-              if (c.dy > 1) {
+              if (c.dy > .5) {
                 c.dy -= .1;
-              } else if (c.dy < -1) {
+              } else if (c.dy < -.5) {
                 c.dy += .1; 
               }
 
