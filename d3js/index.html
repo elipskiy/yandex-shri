@@ -24,21 +24,21 @@
     </style>
     <script>
       window.onload = function() {
-        var w = 960, 
-            h = 500;
+        var width = 960, 
+            height = 500;
 
         var svg = d3.select("#svg_canvas").append("svg:svg")
-          .attr("width", w)
-          .attr("height", h);
+          .attr("width", width)
+          .attr("height", height);
 
         var nodes = d3.range(333).map(function() {
           return {
-            x: w * Math.random(),
-            y: h * Math.random(),
+            x: width * Math.random(),
+            y: height * Math.random(),
             dx: Math.random() - .5,
             dy: Math.random() - .5,
-            cg: Math.floor(Math.random() * 255),
-            cd: -1,
+            colorGreen: Math.floor(Math.random() * 255),
+            colorDirection: -1,
           }
         });
 
@@ -68,46 +68,50 @@
 
         d3.timer(function() {
           circles 
-            .attr("cx", function(c) {
-              c.x += c.dx; 
+            .attr("cx", function(circle) {
+              circle.x += circle.dx; 
 
-              if (c.dx > .5)  {
-                c.dx -= .1;
-              } else if (c.dx < -.5) {
-                c.dx += .1;
+              if (circle.dx > .5)  {
+                circle.dx -= .1;
+              } else if (circle.dx < -.5) {
+                circle.dx += .1;
               }
 
-              if (c.x > w) {
-                c.x -= w; 
-              } else if (c.x < 0) {
-                c.x += w; 
+              if (circle.x > width) {
+                circle.x -= width; 
+              } else if (circle.x < 0) {
+                circle.x += width; 
               }
 
-              return c.x;
-            }).attr("cy", function(c) {
-              c.y += c.dy; 
+              return circle.x;
+            }).attr("cy", function(circle) {
+              circle.y += circle.dy; 
 
-              if (c.dy > .5) {
-                c.dy -= .1;
-              } else if (c.dy < -.5) {
-                c.dy += .1; 
+              if (circle.dy > .5) {
+                circle.dy -= .1;
+              } else if (circle.dy < -.5) {
+                circle.dy += .1; 
               }
 
-              if (c.y > h) { 
-                c.y -= h; 
-              } else if (c.y < 0) {
-                c.y += h;
+              if (circle.y > height) { 
+                circle.y -= height; 
+              } else if (circle.y < 0) {
+                circle.y += height;
               }
 
-              return c.y;
-            }).attr("fill", function(c) {
-              if (c.cg < 5 || c.cg > 250) {
-                c.cd *= -1; 
-              }
-              
-              c.cg += c.cd * Math.random() * 4; 
+              return circle.y;
+            }).attr("fill", function(circle) {              
+              circle.colorGreen += Math.floor(circle.colorDirection * Math.random() * 5); 
 
-              return d3.rgb(255, c.cg, 0);
+              if (circle.colorGreen <= 0) {
+                circle.colorGreen = 0;
+                circle.colorDirection = 1; 
+              } else if (circle.colorGreen >= 255) {
+                circle.colorGreen = 255;
+                circle.colorDirection = -1; 
+              }
+
+              return d3.rgb(255, circle.colorGreen, 0);
             });
         });
       }
