@@ -50,40 +50,32 @@
           var queue = [];
 
           tick = function() {
-            ticker.duration = Date.now() - ticker.now;
             ticker.now = Date.now();
 
             for (var i = 0; i < queue.length; i++) {
-              // var i = 5;
-              if (queue[i].startTime <= 0) {
-                queue[i].startTime = ticker.now;
-              }
-              queue[i].current += (queue[i].to - queue[i].from) / queue[i].time * ticker.duration;
-              // if ((queue[i].current >= queue[i].to && queue[i].to >= queue[i].from) || (queue[i].current <= queue[i].to && queue[i].to <= queue[i].from)) {
-              if ((Date.now() - queue[i].startTime) >= queue[i].time) {
-                queue[i].current = queue[i].to;
+              queue[i].current = queue[i].from + ((queue[i].to - queue[i].from) / queue[i].time * (ticker.now - queue[i].startTime));
+
+              if (ticker.now - queue[i].startTime >= queue[i].time) {
                 updateSpan(queue[i]);
-              } else {
-                queue[i].elem.style.height = queue[i].current + "px";
               }
+
+              queue[i].elem.style.height = queue[i].current + "px";
+
             }
           }
 
           updateSpan = function(span) {
-            // console.log(Date.now() - span.startTime);
-            if (span.to != span.colHeight/2) {
+            // if (span.to != span.colHeight/2) {
+            if (span.toMid === false) {
               span.from = span.to;
               span.to = span.colHeight/2;
-            } else {                      
-              span.from = span.colHeight/2;
-              span.to = Math.round(span.colHeight * Math.random()); 
+              span.toMid = true;
+            } else {
+              span.from = span.to;
+              span.to = Math.round(span.colHeight * Math.random());
+              span.toMid = false;
             }
-            span.current = span.from;
-            // console.log(span.current);
-            span.current += (span.to - span.from) / span.time * (Date.now() - span.startTime - span.time);
-            // console.log((span.to - span.from) / span.time * (Date.now() - span.startTime - span.time));
-            // console.log("   " + span.current);
-            span.startTime = ticker.now;
+            span.startTime = ticker.now - (ticker.now - span.startTime - span.time);
           }
 
           this.start = function() {
@@ -92,6 +84,10 @@
               timer = setInterval(tick, tickTime);
               ticker.start = Date.now();
               ticker.now = Date.now();
+
+              for (var i = 0; i < queue.length; i++) {
+                queue[i].startTime = ticker.start;
+              } 
             }
           }
 
@@ -101,6 +97,11 @@
               active = false;
               timer = null;
             }
+          }
+
+          restart = function() {
+            self.stop();
+            self.start();
           }
 
           this.set = function(id, timeout, colWidth) {
@@ -139,6 +140,8 @@
                 time: timeout/2,
                 startTime: -1,
 
+                toMid: false, 
+
                 timeout: timeout,
                 colWidth: colWidth,
                 colHeight: colHeight,
@@ -146,22 +149,24 @@
               });
             }
 
-            console.log(queue);
+            restart();
           }
 
           this.setFps = function(fps) {
             tickTime = 1000/fps;
+
+            restart();
           }
         }
 
         window.onload = function() {
           equalizer = new Equalizer();
-          equalizer.set("eq_1", 1000, 50);
-          equalizer.setFps(10);
+          equalizer.set("eq_1", 1000, 2);
+          equalizer.set("eq_2", 1000, 2);
+          equalizer.setFps(60);
           equalizer.start();
 
-          // equalizer.set("eq_2", 1000, 2);
-          // equalizer.set("eq_3", 1000, 2);
+          equalizer.set("eq_3", 1000, 2);
           // equalizer.start();
           // equalizer.tick();
         }   
