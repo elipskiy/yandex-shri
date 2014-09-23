@@ -104,10 +104,20 @@
             self.start();
           }
 
-          this.set = function(id, timeout, colWidth) {
+          this.set = function(selector, timeout, colWidth) {
             colWidth = (!colWidth) ? 1 : colWidth;
 
-            var selectorCache = document.getElementById(id).getElementsByClassName("equalizer")[0];
+            var regSelector = /(#|\.)([a-z]+[A-Z_0-9-]*)/ig;
+            var selectorCache = document;
+            while ((select = regSelector.exec(selector)) != null) {
+              if (select[1] === "#") {
+                selectorCache = selectorCache.getElementById(select[2]);
+              } else if (select[1] === ".") {
+                selectorCache = selectorCache.getElementsByClassName(select[2])[0];
+              }
+            }
+
+            // var selectorCache = document.getElementById(id).getElementsByClassName("equalizer")[0];
             selectorCache.style.verticalAlign = "bottom";
             var colHeight = selectorCache.clientHeight;
             selectorCache.style.lineHeight = colHeight + "px";
@@ -161,12 +171,12 @@
 
         window.onload = function() {
           equalizer = new Equalizer();
-          equalizer.set("eq_1", 1000, 2);
-          equalizer.set("eq_2", 1000, 2);
+          equalizer.set("#eq_1 .equalizer", 1000, 2);
+          equalizer.set("#eq_2 .equalizer", 10000, 2);
           equalizer.setFps(60);
           equalizer.start();
 
-          equalizer.set("eq_3", 1000, 2);
+          equalizer.set("#eq_3 .equalizer", 1000);
           // equalizer.start();
           // equalizer.tick();
         }   
