@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Equalizer</title>
+    <style>
+      body {
+        font: 13px Arial, Helvetica, sans-serif;
+      }
+      h1 {
+        font-size: 3em;
+      }
+      .left {
+        text-align: left;
+      }
+
+      .equalizer-wrapper {
+        float:left; 
+        margin: 0 20px 20px 0;
+      }
+      .equalizer {
+        overflow: hidden;
+        border:1px dashed #ccc;
+      }
+      .equalizer.small {
+        width: 100px;
+        height: 100px;
+      }
+      .equalizer.normal {
+        width: 200px;
+        height: 200px;
+      }
+      .equalizer.big {
+        width: 300px;
+        height: 300px;
+      }
+    </style>
+    <script>
+        function Equalizer() {
+          var self = this;
+
+          var tickTime = 17; //~60fps 
+          var active = false;
+          var timer = null;
+          var ticker = {
+            duration: 1000,
+            now: 0,
+            start: 0
+          };
+
+          var queue = [];
+
+          tick = function() {
+            ticker.duration = Date.now() - ticker.now;
+            ticker.now = Date.now();
+
+            for (var i = 0; i < queue.length; i++) {
+              // var i = 5;
+              if (queue[i].startTime <= 0) {
+                queue[i].startTime = ticker.now;
+              }
+              queue[i].current += (queue[i].to - queue[i].from) / queue[i].time * ticker.duration;
+              // if ((queue[i].current >= queue[i].to && queue[i].to >= queue[i].from) || (queue[i].current <= queue[i].to && queue[i].to <= queue[i].from)) {
+              if ((Date.now() - queue[i].startTime) >= queue[i].time) {
+                queue[i].current = queue[i].to;
+                updateSpan(queue[i]);
+              } else {
+                queue[i].elem.style.height = queue[i].current + "px";
+              }
+            }
+          }
+
+          updateSpan = function(span) {
+            // console.log(Date.now() - span.startTime);
+            if (span.to != span.colHeight/2) {
+              span.from = span.to;
+              span.to = span.colHeight/2;
+            } else {                      
+              span.from = span.colHeight/2;
+              span.to = Math.round(span.colHeight * Math.random()); 
+            }
+            span.current = span.from;
+            // console.log(span.current);
+            span.current += (span.to - span.from) / span.time * (Date.now() - span.startTime - span.time);
+            // console.log((span.to - span.from) / span.time * (Date.now() - span.startTime - span.time));
+            // console.log("   " + span.current);
+            span.startTime = ticker.now;
+          }
+
+          this.start = function() {
+            if (!active) {
+              active = true;
+              timer = setInterval(tick, tickTime);
+              ticker.start = Date.now();
+              ticker.now = Date.now();
+            }
+          }
+
+          this.stop = function() {
+            if (active) {
+              clearInterval(timer);
+              active = false;
+              timer = null;
+            }
+          }
+
+          this.set = function(id, timeout, colWidth) {
+            colWidth = (!colWidth) ? 1 : colWidth;
+
+            var selectorCache = document.getElementById(id).getElementsByClassName("equalizer")[0];
+            selectorCache.style.verticalAlign = "bottom";
+            var colHeight = selectorCache.clientHeight;
+            selectorCache.style.lineHeight = colHeight + "px";
+
+            var colQuantity = Math.ceil(selectorCache.clientWidth/colWidth);
+            var fragment = document.createDocumentFragment();
+            for (var i = 0; i < colQuantity; i++) {
+                var span = document.createElement("span");
+                span.style.height = colHeight/2 + "px";
+                span.style.width = colWidth + "px";
+                span.style.verticalAlign = "bottom";
+                span.style.display = "inline-block";
+                span.style.fontSize = "0";
+                span.style.lineHeight = "0px";
+                span.style.background = "pink";
+                span.style.borderTop = "2px solid red";
+                span.style.overflow = "hidden";
+
+                fragment.appendChild(span);
+            }
+            selectorCache.appendChild(fragment); 
+            var selectorSpanCache = selectorCache.getElementsByTagName("span");
+
+            for (var i = 0; i < selectorSpanCache.length; i++) {
+              queue.push({
+                elem: selectorSpanCache[i],
+                from: colHeight/2,
+                to: Math.round(colHeight * Math.random()),
+                current: colHeight/2, 
+                time: timeout/2,
+                startTime: -1,
+
+                timeout: timeout,
+                colWidth: colWidth,
+                colHeight: colHeight,
+                colQuantity: colQuantity,
+              });
+            }
+
+            console.log(queue);
+          }
+
+          this.setFps = function(fps) {
+            tickTime = 1000/fps;
+          }
+        }
+
+        window.onload = function() {
+          equalizer = new Equalizer();
+          equalizer.set("eq_1", 1000, 50);
+          equalizer.setFps(10);
+          equalizer.start();
+
+          // equalizer.set("eq_2", 1000, 2);
+          // equalizer.set("eq_3", 1000, 2);
+          // equalizer.start();
+          // equalizer.tick();
+        }   
+    </script>
+  </head>
+  <body>
+    <h1 class="left">Equalizers</h1>
+    <div id="eq_1" class="equalizer-wrapper">
+      <h2>First</h2>
+      <div class="equalizer small"></div>
+    </div>
+    <div id="eq_2" class="equalizer-wrapper">
+      <h2>Second</h2>
+      <div class="equalizer normal"></div>
+    </div>
+    <div id="eq_3" class="equalizer-wrapper">
+      <h2>Third</h2>
+      <div class="equalizer big"></div>
+    </div>
+  </body>
+</html>
