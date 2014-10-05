@@ -49,7 +49,7 @@
             colWidth = 1;
           }
 
-          var selectorCache = document.getElementById(selector).getElementsByClassName("equalizer")[0];
+          var selectorCache = document.querySelector(selector);
           selectorCache.style.verticalAlign = "bottom";
           selectorCache.style.lineHeight = selectorCache.clientHeight + "px";
 
@@ -83,9 +83,9 @@
         }
 
         window.onload = function() {
-          setEqualizer("eq_1", 1000, 2);
-          setEqualizer("eq_2", 1000, 2);
-          setEqualizer("eq_3", 1000, 2);
+          setEqualizer("#eq_1 .equalizer", 1000, 2);
+          setEqualizer("#eq_2 .equalizer", 1000, 2);
+          setEqualizer("#eq_3 .equalizer", 1000, 2);
         }    
     </script>
   </head>
