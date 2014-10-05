@@ -89,6 +89,8 @@
                 queue[i].startTime = ticker.start;
               } 
             }
+
+            return this;
           }
 
           this.stop = function() {
@@ -97,6 +99,8 @@
               active = false;
               timer = null;
             }
+
+            return this;
           }
 
           restart = function() {
@@ -160,25 +164,27 @@
             }
 
             restart();
+
+            return this;
           }
 
           this.setFps = function(fps) {
             tickTime = 1000/fps;
 
             restart();
+
+            return this;
           }
         }
 
         window.onload = function() {
           equalizer = new Equalizer();
-          equalizer.set("#eq_1 .equalizer", 1000, 2);
-          equalizer.set("#eq_2 .equalizer", 10000, 2);
-          equalizer.setFps(60);
-          equalizer.start();
+          equalizer.set("#eq_1 .equalizer", 1000, 2).set("#eq_2 .equalizer", 10000, 2).start().setFps(60);
+          // equalizer.set("#eq_2 .equalizer", 10000, 2);
+          // equalizer.setFps(60);
+          // equalizer.start().setFps(15);
 
           equalizer.set("#eq_3 .equalizer", 1000);
-          // equalizer.start();
-          // equalizer.tick();
         }   
     </script>
   </head>
