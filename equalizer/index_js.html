@@ -109,7 +109,7 @@
           }
 
           this.set = function(selector, timeout, colWidth) {
-            colWidth = (!colWidth) ? 1 : colWidth;
+            colWidth = colWidth || 1;
 
             var regSelector = /(#|\.)([a-z]+[A-Z_0-9-]*)/ig;
             var selectorCache = document;
@@ -180,10 +180,6 @@
         window.onload = function() {
           equalizer = new Equalizer();
           equalizer.set("#eq_1 .equalizer", 1000, 2).set("#eq_2 .equalizer", 10000, 2).start().setFps(60);
-          // equalizer.set("#eq_2 .equalizer", 10000, 2);
-          // equalizer.setFps(60);
-          // equalizer.start().setFps(15);
-
           equalizer.set("#eq_3 .equalizer", 1000);
         }   
     </script>
